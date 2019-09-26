@@ -1,0 +1,37 @@
+ 
+# HTTP Server
+server:
+  port: @eureka-port@   # HTTP (Tomcat) port
+
+eureka:
+  datacenter: Main
+  instance:
+    hostname: @eureka-server@
+    prefer-ip-address: true
+  client:  # Not a client, don't register with yourself
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://@eureka-server@:@eureka-port@/eureka/
+
+spring:
+  main:
+    banner-mode: "off"
+  thymeleaf:
+    enabled: false     # Disable Thymeleaf     
+
+# Set logging to file
+logging:
+  file: @logging-file@
+  config: classpath:logback.xml
+  
+# Actuator details
+management:
+  endpoints:
+    web:
+      exposure:
+        include: @actuator-endpoints@
+  endpoint:
+    health:
+      show-details: @actuator-details@  
+
