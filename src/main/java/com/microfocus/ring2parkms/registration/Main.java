@@ -1,9 +1,8 @@
 package com.microfocus.ring2parkms.registration;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.cli.*;
-
 import com.microfocus.ring2parkms.web.services.RegistrationServer;
+import org.apache.commons.cli.*;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -16,14 +15,18 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-	final static Logger logger = Logger.getLogger(Main.class.getName());
+    final static Logger logger = Logger.getLogger(Main.class.getName());
 
-	public static void main(String[] args) {
-		ArrayList<String> bootOptions = new ArrayList<String>();
+    public static void main(String[] args) {
+        ArrayList<String> bootOptions = new ArrayList<String>();
 
-	    Options options = new Options();
+        Options options = new Options();
 
-		Option eh = new Option("eh", "eurekaHostname", true, "eureka instance hostname");
+        Option sp = new Option("sp", "serverPort", true, "HTTP server port");
+        sp.setRequired(false);
+        options.addOption(sp);
+
+        Option eh = new Option("eh", "eurekaHostname", true, "eureka instance hostname");
         eh.setRequired(false);
         options.addOption(eh);
 
@@ -34,8 +37,9 @@ public class Main {
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         CommandLine cmd;
-		String eurekaHost = "";
-		String eurekaPort = "";
+        String serverPort = "";
+        String eurekaHost = "";
+        String eurekaPort = "";
 
         try {
             cmd = parser.parse(options, args);
@@ -46,23 +50,32 @@ public class Main {
             return;
         }
 
-		if (cmd.hasOption("eh")) {
-			eurekaHost = cmd.getOptionValue("eh").replace("'", "");
-			if (!StringUtils.isEmpty(eurekaHost)) {
-				logger.info("Overriding eureka.instance.hostname to: " + eurekaHost);
-				System.setProperty("eureka.instance.hostname", eurekaHost);
-			}
-		}
+        if (cmd.hasOption("sp")) {
+            serverPort = cmd.getOptionValue("sp").replace("'", "");
+            if (!StringUtils.isEmpty(serverPort)) {
+                logger.info("Overriding HTTP server port to: " + serverPort);
+                System.setProperty("server.port", serverPort);
+            }
+        }
+        bootOptions.add(serverPort);
+
+        if (cmd.hasOption("eh")) {
+            eurekaHost = cmd.getOptionValue("eh").replace("'", "");
+            if (!StringUtils.isEmpty(eurekaHost)) {
+                logger.info("Overriding eureka.instance.hostname to: " + eurekaHost);
+                System.setProperty("eureka.instance.hostname", eurekaHost);
+            }
+        }
         bootOptions.add(eurekaHost);
 
         if (cmd.hasOption("ep")) {
-			eurekaPort = cmd.getOptionValue("ep").replace("'", "");
-			if (!StringUtils.isEmpty(eurekaPort)) {
-				logger.info("Overriding eureka.instance.port to: " + eurekaPort);
-				System.setProperty("eureka.instance.port", eurekaPort);
-			}
-		}
-		bootOptions.add(eurekaPort);
+            eurekaPort = cmd.getOptionValue("ep").replace("'", "");
+            if (!StringUtils.isEmpty(eurekaPort)) {
+                logger.info("Overriding eureka.instance.port to: " + eurekaPort);
+                System.setProperty("eureka.instance.port", eurekaPort);
+            }
+        }
+        bootOptions.add(eurekaPort);
 
         String[] bootArgs = new String[bootOptions.size()];
         bootArgs = bootOptions.toArray(bootArgs);
