@@ -11,7 +11,7 @@ ENV EUREKA_HOST=$eurekaHost
 ENV EUREKA_PORT=$eurekaPort
 ENV SERVER_PORT=$serverPort
 
-ADD target/registration-service-${imageVersion}.jar app.jar
+ADD target/eureka-service-${imageVersion}.jar app.jar
 
 RUN sh -c 'touch /app.jar'
 

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.microfocus.microservices</groupId>
-    <artifactId>registration-service</artifactId>
+    <artifactId>eureka-service</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
@@ -35,7 +35,7 @@
         <actuator-details>always</actuator-details>
         <actuator-endpoints>"health,info,beans,metrics,env,logfile"</actuator-endpoints>
         <!-- Logging configuration -->
-        <logging-file>registration-service.log</logging-file>
+        <logging-file>eureka-service.log</logging-file>
     </properties>
 
     <dependencies>
